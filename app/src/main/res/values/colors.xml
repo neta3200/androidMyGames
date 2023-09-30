@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="link_color">#007AFF</color> <!-- Change this to your desired link text color -->
+    <color name="link_highlight_color">#FF0000</color> <!-- Change this to your desired highlight color when clicked -->
+    <color name="buttonColors">#07aae0</color>
+</resources>

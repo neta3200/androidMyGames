@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragLogin">
+
+    <fragment
+        android:id="@+id/fragHomepage"
+        android:name="com.example.mygames.Fragments.fragHomepage"
+        android:label="fragment_frag_homepage"
+        tools:layout="@layout/fragment_frag_homepage" />
+    <fragment
+        android:id="@+id/fragRegister"
+        android:name="com.example.mygames.Fragments.fragRegister"
+        android:label="fragment_frag_register"
+        tools:layout="@layout/fragment_frag_register" >
+        <action
+            android:id="@+id/action_fragRegister_to_fragHomepage"
+            app:destination="@id/fragHomepage" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragLogin"
+        android:name="com.example.mygames.Fragments.fragLogin"
+        android:label="fragment_frag_login"
+        tools:layout="@layout/fragment_frag_login" >
+        <action
+            android:id="@+id/action_fragLogin_to_fragRegister"
+            app:destination="@id/fragRegister" />
+        <action
+            android:id="@+id/action_fragLogin_to_fragHomepage"
+            app:destination="@id/fragHomepage" />
+        <action
+            android:id="@+id/action_fragLogin_to_frag_contact"
+            app:destination="@id/frag_contact" />
+    </fragment>
+    <fragment
+        android:id="@+id/frag_contact"
+        android:name="com.example.mygames.Fragments.fragContact"
+        android:label="fragment_frag_contact"
+        tools:layout="@layout/fragment_frag_contact" />
+</navigation>
