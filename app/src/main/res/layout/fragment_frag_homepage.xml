@@ -45,6 +45,35 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/Platform"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:gravity="center"
+            android:text="Platform:"
+            android:textSize="16dp" />
+
+        <Spinner
+            android:id="@+id/platformSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp" />
+
+        <CheckBox
+            android:id="@+id/sortedCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Sort by Release Date"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recView"
         android:layout_width="wrap_content"

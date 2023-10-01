@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.mygames.Adapters.CustomAdapter;
@@ -29,10 +35,11 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class fragHomepage extends Fragment {
-
+    private String selectedPlatform = "All";
     private EditText searchEditText;
     private Button searchButton;
 
+    private String SortedBy = null;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private CustomAdapter customAdapter;
@@ -89,13 +96,50 @@ public class fragHomepage extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_frag_homepage, container, false);
         recyclerView = v.findViewById(R.id.recView);
 
+        CheckBox sortedCheckBox = v.findViewById(R.id.sortedCheckBox);
+        Spinner platformSpinner = v.findViewById(R.id.platformSpinner);
+        ArrayAdapter<CharSequence> platformAdapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.platform_options, android.R.layout.simple_spinner_item);
+        platformAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        platformSpinner.setAdapter(platformAdapter);
+
+
+        platformSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                selectedPlatform = parentView.getItemAtPosition(position).toString();
+                performSearch(selectedPlatform, SortedBy);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do nothing if nothing is selected
+            }
+        });
+
+        sortedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Check if the CheckBox is checked
+                if (isChecked) {
+                    SortedBy = "release-date";
+                    performSearch(selectedPlatform, SortedBy);
+
+                } else {
+                    SortedBy = null;
+                    performSearch(selectedPlatform, null);
+                }
+            }
+        });
+
+
         searchEditText = v.findViewById(R.id.searchEditText);
         searchButton = v.findViewById(R.id.searchButton);
         // Set an onClickListener for the search button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                performSearch();
+                performSearch(selectedPlatform, SortedBy);
             }
         });
 
@@ -113,29 +157,39 @@ public class fragHomepage extends Fragment {
     }
 
 
-    private void performSearch() {
+    private void performSearch(String platform, String sortBy) {
         String query = searchEditText.getText().toString().trim();
+        String apiUrl = "https://www.freetogame.com/api/games?";
+        if (!platform.equals("All")) {
+            apiUrl += "platform=" + platform.toLowerCase() + "&";
+        }
+        if (sortBy != null) {
+            apiUrl += "sort-by=" + sortBy;
+        }
 
+        Log.d("apiUrl", apiUrl);
         // Check if the search query is empty
         if (!query.isEmpty()) {
             // Append the query to your API URL
-            String apiUrl = "https://www.freetogame.com/api/games?category=" + query;
+            apiUrl += "category=" + query.toLowerCase();
 
                 // Make an API call with the updated URL
                 ArrayList<DataModel> searchResults = DataService.getArrState(apiUrl);
-
+/*
                 if (searchResults != null) {
                     adapter.updateData(searchResults);
                 } else {
                     Toast.makeText(requireContext(), "No results found", Toast.LENGTH_SHORT).show();
-                }
-        } else {
+                }*/
+        }
             // Handle the case when the search query is empty
             // For example, show a message to enter a valid search query
-            String apiUrl = "https://www.freetogame.com/api/games";
+            //String apiUrl = "https://www.freetogame.com/api/games";
+
+            Log.d("apiUrlBeforeUpdate", apiUrl);
             ArrayList<DataModel> searchResults = DataService.getArrState(apiUrl);
             adapter.updateData(searchResults);
             //Toast.makeText(requireContext(), "Please enter a search query", Toast.LENGTH_SHORT).show();
-        }
+
     }
 }
